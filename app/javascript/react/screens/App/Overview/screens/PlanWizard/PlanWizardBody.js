@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { noop } from 'patternfly-react';
-import ModalWizard from '../../components/ModalWizard';
+import ModalWizard from '../../components/ModalWizard'; // TODO:MJT delete this !!
 import componentRegistry from '../../../../../../components/componentRegistry';
 import PlanWizardGeneralStep from '../PlanWizard/components/PlanWizardGeneralStep';
 import PlanWizardOptionsStep from '../PlanWizard/components/PlanWizardOptionsStep';
+
+//// --> TODO:MJT probably just delete this entire file <-- ////
 
 class PlanWizardBody extends React.Component {
   constructor(props) {
@@ -22,7 +24,7 @@ class PlanWizardBody extends React.Component {
   }
   render() {
     return (
-      <ModalWizard.Body
+      <ModalWizard.Body // TODO:MJT delete me
         {...this.props}
         loadingTitle={__('Loading Migration Plans...')}
         loadingMessage={__('This may take a minute.')}
@@ -60,7 +62,7 @@ PlanWizardBody.propTypes = {
   activeStep: PropTypes.string,
   goToStep: PropTypes.func,
   disableNextStep: PropTypes.bool,
-  plansBody: PropTypes.object,
+  plansBody: PropTypes.object, // what the hell is this even? it is not used...
   planWizardGeneralStep: PropTypes.object,
   planWizardVMStep: PropTypes.object
 };
@@ -71,7 +73,7 @@ PlanWizardBody.defaultProps = {
   activeStep: '1',
   goToStep: noop,
   disableNextStep: true,
-  plansBody: {},
+  plansBody: {}, // what the hell is this even? it is not used...
   planWizardGeneralStep: {},
   planWizardVMStep: {}
 };
