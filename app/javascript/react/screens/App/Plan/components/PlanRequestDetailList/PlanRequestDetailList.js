@@ -281,11 +281,17 @@ class PlanRequestDetailList extends React.Component {
     const { selectedCancelTasks } = this.state;
     const filteredTasks = this.filterPlanRequestTasks();
     const incompleteTasks = filteredTasks.filter(task => !task.completed && !task.cancel_requested);
+    const noneSelected = selectedCancelTasks.length === 0;
+    const allSelected = !noneSelected && selectedCancelTasks.length === incompleteTasks.length;
+    const noneSelectable = incompleteTasks.length === 0;
     return {
       filteredTasks,
       incompleteTasks,
-      allSelected: selectedCancelTasks.length === incompleteTasks.length,
-      noneSelected: selectedCancelTasks.length === 0
+      noneSelected,
+      allSelected,
+      noneSelectable,
+      selectAllDisabled: allSelected || noneSelectable,
+      selectNoneDisabled: noneSelected
     };
   };
 
@@ -358,7 +364,7 @@ class PlanRequestDetailList extends React.Component {
 
     const { downloadLogInProgressTaskIds, ansiblePlaybookTemplate, planRequestTasks } = this.props;
 
-    const { filteredTasks, allSelected, noneSelected } = this.getCancelSelectionState();
+    const { filteredTasks, allSelected, selectAllDisabled, selectNoneDisabled } = this.getCancelSelectionState();
 
     const paginatedSortedFiltersTasks = this.filterSortPaginatePlanRequestTasks(filteredTasks);
     const totalNumTasks = planRequestTasks.length;
@@ -380,11 +386,15 @@ class PlanRequestDetailList extends React.Component {
         <Grid.Row>
           <Toolbar>
             <FormGroup style={{ paddingLeft: 0 }}>
-              <DropdownButton title={selectAllCheckbox} id="bulk-selector">
-                <MenuItem eventKey="1" disabled={allSelected} onClick={this.selectAllInProgressTasks}>
+              <DropdownButton
+                title={selectAllCheckbox}
+                id="bulk-selector"
+                disabled={selectAllDisabled && selectNoneDisabled}
+              >
+                <MenuItem eventKey="1" disabled={selectAllDisabled} onClick={this.selectAllInProgressTasks}>
                   {__('Select All')}
                 </MenuItem>
-                <MenuItem eventKey="2" disabled={noneSelected} onClick={this.deselectAllTasks}>
+                <MenuItem eventKey="2" disabled={selectNoneDisabled} onClick={this.deselectAllTasks}>
                   {__('Select None')}
                 </MenuItem>
               </DropdownButton>
