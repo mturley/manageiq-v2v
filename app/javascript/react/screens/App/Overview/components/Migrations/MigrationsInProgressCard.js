@@ -108,7 +108,7 @@ const MigrationsInProgressCard = ({
           </Popover>
         }
         placement="top"
-        trigger={['hover']}
+        trigger={['click']}
         delay={500}
         rootClose={false}
       >

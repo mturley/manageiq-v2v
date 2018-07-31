@@ -116,6 +116,15 @@ class ClustersStepForm extends React.Component {
       />
     );
 
+    const targetConversionHostWarning = (
+      <span>
+        At least one host in the target cluster must be enabled as a conversion host.
+        You can continue to create an infrastructure mapping that includes the target
+        cluster, but conversion host enablement must be completed prior to migration
+        execution.
+      </span>
+    );
+
     return (
       <div className="dual-pane-mapper-form">
         <p style={{ marginLeft: -40 }}>
@@ -146,6 +155,7 @@ class ClustersStepForm extends React.Component {
                   selected={
                     selectedSourceClusters && selectedSourceClusters.some(sourceCluster => sourceCluster.id === item.id)
                   }
+
                   handleClick={this.selectSourceCluster}
                   handleKeyPress={this.selectSourceCluster}
                 />
@@ -158,20 +168,24 @@ class ClustersStepForm extends React.Component {
               listTitle={multiProviderTargetLabel(targetProvider, 'cluster')}
               loading={isFetchingTargetClusters}
             >
-              {targetClusters.map(item => (
-                <DualPaneMapperListItem
-                  item={item}
-                  text={
-                    item.v_parent_datacenter
-                      ? `${item.ext_management_system.name} \\ ${item.v_parent_datacenter} \\ ${item.name}`
-                      : `${item.ext_management_system.name} \\ ${item.name}`
-                  }
-                  key={item.id}
-                  selected={selectedTargetCluster && selectedTargetCluster.id === item.id}
-                  handleClick={this.selectTargetCluster}
-                  handleKeyPress={this.selectTargetCluster}
-                />
-              ))}
+              {targetClusters.map(item => {
+                console.log('[mturley] target cluster:', item); // TODO [mturley] look in redux
+                return (
+                  <DualPaneMapperListItem
+                    item={item}
+                    text={
+                      item.v_parent_datacenter
+                        ? `${item.ext_management_system.name} \\ ${item.v_parent_datacenter} \\ ${item.name}`
+                        : `${item.ext_management_system.name} \\ ${item.name}`
+                    }
+                    key={item.id}
+                    selected={selectedTargetCluster && selectedTargetCluster.id === item.id}
+                    handleClick={this.selectTargetCluster}
+                    handleKeyPress={this.selectTargetCluster}
+                    warningMessage={showWarning && targetConversionHostWarning}
+                  />
+                );
+              })}
             </DualPaneMapperList>
           )}
         </DualPaneMapper>
