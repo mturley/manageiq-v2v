@@ -116,14 +116,12 @@ class ClustersStepForm extends React.Component {
       />
     );
 
-    const targetConversionHostWarning = (
-      <span>
-        At least one host in the target cluster must be enabled as a conversion host.
-        You can continue to create an infrastructure mapping that includes the target
-        cluster, but conversion host enablement must be completed prior to migration
-        execution.
-      </span>
-    );
+    const targetConversionHostWarning = __(`
+      At least one host in the target cluster must be enabled as a conversion host.
+      You can continue to create an infrastructure mapping that includes the target
+      cluster, but conversion host enablement must be completed prior to migration
+      execution.
+    `);
 
     return (
       <div className="dual-pane-mapper-form">
