@@ -17,11 +17,16 @@ class MappingWizardClustersStep extends React.Component {
       fetchSourceClustersAction,
       fetchTargetComputeUrls,
       fetchTargetClustersAction,
-      targetProvider
+      targetProvider,
+      queryHostsUrl,
+      queryHostsAction
     } = this.props;
 
     fetchSourceClustersAction(fetchSourceClustersUrl);
-    fetchTargetClustersAction(fetchTargetComputeUrls[targetProvider]);
+    fetchTargetClustersAction(fetchTargetComputeUrls[targetProvider]).then(result => {
+      console.log('[mturley] chain result: ', result);
+      queryHostsAction(queryHostsUrl);
+    });
   };
 
   render() {

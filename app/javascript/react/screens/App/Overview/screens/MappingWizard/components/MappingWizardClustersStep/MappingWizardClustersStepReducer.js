@@ -1,6 +1,7 @@
 import Immutable from 'seamless-immutable';
 
-import { FETCH_V2V_SOURCE_CLUSTERS, FETCH_V2V_TARGET_CLUSTERS } from './MappingWizardClustersStepConstants';
+import { FETCH_V2V_SOURCE_CLUSTERS, FETCH_V2V_TARGET_CLUSTERS, QUERY_V2V_HOSTS } from './MappingWizardClustersStepConstants';
+import { queryHostsAction } from './MappingWizardClustersStepActions';
 
 const initialState = Immutable({
   sourceClusters: [],
@@ -51,6 +52,15 @@ export default (state = initialState, action) => {
         .set('errorTargetClusters', action.payload)
         .set('isRejectedTargetClusters', true)
         .set('isFetchingTargetClusters', false);
+    case `${QUERY_V2V_HOSTS}_PENDING`:
+      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
+      return state;
+    case `${QUERY_V2V_HOSTS}_FULFILLED`:
+      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
+      return state;
+    case `${QUERY_V2V_HOSTS}_REJECTED`:
+      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
+      return state;
     default:
       return state;
   }
