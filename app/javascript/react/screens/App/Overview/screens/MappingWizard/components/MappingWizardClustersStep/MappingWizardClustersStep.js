@@ -24,8 +24,9 @@ class MappingWizardClustersStep extends React.Component {
 
     fetchSourceClustersAction(fetchSourceClustersUrl);
     fetchTargetClustersAction(fetchTargetComputeUrls[targetProvider]).then(result => {
-      console.log('[mturley] chain result: ', result);
-      queryHostsAction(queryHostsUrl);
+      console.log('[mturley] DOING A QUERY: ', queryHostsUrl, hostIDs);
+      const hostIDs = result.value.data.resources.map(host => host.id);
+      queryHostsAction(queryHostsUrl, hostIDs);
     });
   };
 
@@ -76,6 +77,8 @@ MappingWizardClustersStep.propTypes = {
   fetchSourceClustersAction: PropTypes.func,
   fetchTargetComputeUrls: PropTypes.object,
   fetchTargetClustersAction: PropTypes.func,
+  queryHostsUrl: PropTypes.string,
+  queryHostsAction: PropTypes.func,
   sourceClusters: PropTypes.arrayOf(PropTypes.object),
   targetClusters: PropTypes.arrayOf(PropTypes.object),
   isFetchingSourceClusters: PropTypes.bool,
@@ -89,6 +92,8 @@ MappingWizardClustersStep.defaultProps = {
   fetchSourceClustersAction: noop,
   fetchTargetComputeUrls: {},
   fetchTargetClustersAction: noop,
+  queryHostsUrl: '',
+  queryHostsAction: noop,
   isFetchingSourceClusters: true,
   isFetchingTargetClusters: true,
   isRejectedSourceClusters: false,

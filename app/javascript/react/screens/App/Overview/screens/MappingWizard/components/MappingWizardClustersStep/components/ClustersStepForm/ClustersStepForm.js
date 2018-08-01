@@ -166,7 +166,8 @@ class ClustersStepForm extends React.Component {
               loading={isFetchingTargetClusters}
             >
               {targetClusters.map(item => {
-                console.log('[mturley] target cluster:', item); // TODO [mturley] look in redux
+                console.log('[mturley] target cluster:', item);
+                const showWarning = true; // [mturley] TODO base this on actual host data
                 return (
                   <DualPaneMapperListItem
                     item={item}

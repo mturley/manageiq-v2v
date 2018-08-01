@@ -33,7 +33,7 @@ const _getQueryHostsActionCreator = (url, hostIDs) => dispatch =>
     })
   });
 
-export const queryHostsAction = (url, hostIDs) => dispatch => {
+export const queryHostsAction = (url, hostIDs) => {
   const uri = new URI(url);
-  return _getQueryHostsActionCreator(uri.toString());
+  return _getQueryHostsActionCreator(uri.toString(), hostIDs);
 };
