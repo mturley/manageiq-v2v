@@ -4,23 +4,14 @@ import cx from 'classnames';
 import EllipsisWithTooltip from 'react-ellipsis-with-tooltip';
 import { OverlayTrigger, Popover, Icon } from 'patternfly-react';
 
-const DualPaneMapperListItem = ({
-  item,
-  text,
-  warningMessage,
-  selected,
-  handleClick,
-  handleKeyPress
-}) => {
+const DualPaneMapperListItem = ({ item, text, warningMessage, selected, handleClick, handleKeyPress }) => {
   const classes = cx('dual-pane-mapper-item', { selected });
 
   const warningOverlay = warningMessage && (
     <OverlayTrigger
       overlay={
         <Popover id={`warning_for_${text}`}>
-          <div style={{ maxWidth: 400 }}>
-            {warningMessage}
-          </div>
+          <div style={{ maxWidth: 400 }}>{warningMessage}</div>
         </Popover>
       }
       placement="top"
@@ -29,13 +20,9 @@ const DualPaneMapperListItem = ({
       rootClose
       onClick={event => event.stopPropagation() /* Don't alter the selection */}
     >
-      <Icon
-        type="pf"
-        name="warning-triangle-o"
-        className="clickable-icon"
-      />
+      <Icon type="pf" name="warning-triangle-o" className="clickable-icon" />
     </OverlayTrigger>
-  )
+  );
 
   return (
     <div
@@ -62,7 +49,7 @@ const DualPaneMapperListItem = ({
 DualPaneMapperListItem.propTypes = {
   item: PropTypes.object,
   text: PropTypes.string,
-  warning: PropTypes.node,
+  warningMessage: PropTypes.node,
   selected: PropTypes.bool,
   handleClick: PropTypes.func,
   handleKeyPress: PropTypes.func
