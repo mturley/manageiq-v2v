@@ -24,11 +24,13 @@ class MappingWizardClustersStep extends React.Component {
 
     fetchSourceClustersAction(fetchSourceClustersUrl);
     fetchTargetClustersAction(fetchTargetComputeUrls[targetProvider]).then(result => {
-      const hostIDsByClusterID = result.value.data.resources
-        .reduce((newObject, cluster) => ({
+      const hostIDsByClusterID = result.value.data.resources.reduce(
+        (newObject, cluster) => ({
           ...newObject,
           [cluster.id]: cluster.hosts.map(host => host.id)
-        }), {});
+        }),
+        {}
+      );
       queryHostsAction(queryHostsUrl, hostIDsByClusterID);
     });
   };
@@ -94,7 +96,10 @@ MappingWizardClustersStep.propTypes = {
   isFetchingTargetClusters: PropTypes.bool,
   isRejectedSourceClusters: PropTypes.bool,
   isRejectedTargetClusters: PropTypes.bool,
-  targetProvider: PropTypes.string
+  targetProvider: PropTypes.string,
+  isFetchingHostsQuery: PropTypes.bool,
+  isRejectedHostsQuery: PropTypes.bool,
+  hostsByClusterID: PropTypes.object
 };
 MappingWizardClustersStep.defaultProps = {
   fetchSourceClustersUrl: '',
@@ -107,7 +112,10 @@ MappingWizardClustersStep.defaultProps = {
   isFetchingTargetClusters: true,
   isRejectedSourceClusters: false,
   isRejectedTargetClusters: false,
-  targetProvider: ''
+  targetProvider: '',
+  isFetchingHostsQuery: false,
+  isRejectedHostsQuery: false,
+  hostsByClusterID: {}
 };
 
 export default reduxForm({

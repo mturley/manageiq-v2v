@@ -32,12 +32,12 @@ const _getQueryHostsActionCreator = (url, hostIDsByClusterID) => dispatch => {
   const hostIDs = Object.values(hostIDsByClusterID).reduce(
     (allHostIDs, someHostIDs) => [...allHostIDs, ...someHostIDs],
     []
-  )
+  );
   return dispatch({
     type: QUERY_V2V_HOSTS,
     payload: API.post(url, {
       action: 'query',
-      resources: hostIDs.map(id => ({ id })),
+      resources: hostIDs.map(id => ({ id }))
     }),
     meta: { hostIDsByClusterID }
   });

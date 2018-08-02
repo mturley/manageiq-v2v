@@ -5,7 +5,6 @@ import {
   FETCH_V2V_TARGET_CLUSTERS,
   QUERY_V2V_HOSTS
 } from './MappingWizardClustersStepConstants';
-import { queryHostsAction } from './MappingWizardClustersStepActions';
 
 const initialState = Immutable({
   sourceClusters: [],
@@ -21,6 +20,28 @@ const initialState = Immutable({
   isRejectedHostsQuery: false,
   errorHostsQuery: null
 });
+
+const getHostsByClusterID = hostsQueryFulfilledAction => {
+  const {
+    meta: { hostIDsByClusterID },
+    payload: { data }
+  } = hostsQueryFulfilledAction;
+  const hostsByID = data.results.reduce(
+    (newObject, host) => ({
+      ...newObject,
+      [host.id]: host
+    }),
+    {}
+  );
+  const hostsByClusterID = Object.keys(hostIDsByClusterID).reduce(
+    (newObject, clusterID) => ({
+      ...newObject,
+      [clusterID]: hostsByID[hostIDsByClusterID[clusterID]]
+    }),
+    {}
+  );
+  return hostsByClusterID;
+};
 
 export default (state = initialState, action) => {
   switch (action.type) {
@@ -63,25 +84,10 @@ export default (state = initialState, action) => {
     case `${QUERY_V2V_HOSTS}_PENDING`:
       return state.set('isFetchingHostsQuery', true).set('isRejectedHostsQuery', false);
     case `${QUERY_V2V_HOSTS}_FULFILLED`:
-      const { meta: { hostIDsByClusterID }, payload: { data } } = action;
-      const hostsByHostID = data.results.reduce(
-        (newObject, host) => ({
-          ...newObject,
-          [host.id]: host
-        }),
-        {}
-      );
-      const hostsByClusterID = Object.keys(hostIDsByClusterID).reduce(
-        (newObject, clusterID) => ({
-          ...newObject,
-          [clusterID]: hostsByHostID[hostIDsByClusterID[clusterID]]
-        }),
-        {}
-      );
       return state
-        .set('hostsByClusterID', hostsByClusterID)
+        .set('hostsByClusterID', getHostsByClusterID(action))
         .set('isFetchingHostsQuery', false)
-        .set('isRejectedHostsQuery', false)
+        .set('isRejectedHostsQuery', false);
     case `${QUERY_V2V_HOSTS}_REJECTED`:
       return state
         .set('errorHostsQuery', action.payload)

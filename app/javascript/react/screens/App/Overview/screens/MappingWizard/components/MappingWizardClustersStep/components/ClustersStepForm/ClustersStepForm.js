@@ -167,9 +167,11 @@ class ClustersStepForm extends React.Component {
               loading={isFetchingTargetClusters}
             >
               {targetClusters.map(item => {
-                const hosts = hostsByClusterID[item];
-                console.log('[mturley] HOSTS', hosts);
-                const showWarning = !isFetchingHostsQuery && hosts && true; // host has no conversion host enabled
+                const hosts = hostsByClusterID[item.id];
+                const someConversionHostEnabled =
+                  hosts &&
+                  hosts.some(host => host.tags.some(tag => tag.name === '/managed/v2v_transformation_host/true'));
+                const showWarning = !isFetchingHostsQuery && !someConversionHostEnabled;
                 return (
                   <DualPaneMapperListItem
                     item={item}
@@ -209,7 +211,9 @@ ClustersStepForm.propTypes = {
   targetClusters: PropTypes.arrayOf(PropTypes.object),
   isFetchingSourceClusters: PropTypes.bool,
   isFetchingTargetClusters: PropTypes.bool,
-  targetProvider: PropTypes.string
+  targetProvider: PropTypes.string,
+  isFetchingHostsQuery: PropTypes.bool,
+  hostsByClusterID: PropTypes.object
 };
 
 export default ClustersStepForm;
