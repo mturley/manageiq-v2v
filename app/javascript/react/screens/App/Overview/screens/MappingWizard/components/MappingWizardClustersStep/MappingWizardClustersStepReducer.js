@@ -36,7 +36,7 @@ const getHostsByClusterID = hostsQueryFulfilledAction => {
   const hostsByClusterID = Object.keys(hostIDsByClusterID).reduce(
     (newObject, clusterID) => ({
       ...newObject,
-      [clusterID]: hostsByID[hostIDsByClusterID[clusterID]]
+      [clusterID]: hostIDsByClusterID[clusterID].map(hostID => hostsByID[hostID])
     }),
     {}
   );
