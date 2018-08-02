@@ -1,6 +1,10 @@
 import Immutable from 'seamless-immutable';
 
-import { FETCH_V2V_SOURCE_CLUSTERS, FETCH_V2V_TARGET_CLUSTERS, QUERY_V2V_HOSTS } from './MappingWizardClustersStepConstants';
+import {
+  FETCH_V2V_SOURCE_CLUSTERS,
+  FETCH_V2V_TARGET_CLUSTERS,
+  QUERY_V2V_HOSTS
+} from './MappingWizardClustersStepConstants';
 import { queryHostsAction } from './MappingWizardClustersStepActions';
 
 const initialState = Immutable({
@@ -11,7 +15,11 @@ const initialState = Immutable({
   targetClusters: [],
   isFetchingTargetClusters: false,
   isRejectedTargetClusters: false,
-  errorTargetClusters: null
+  errorTargetClusters: null,
+  hostsByClusterID: {},
+  isFetchingHostsQuery: false,
+  isRejectedHostsQuery: false,
+  errorHostsQuery: null
 });
 
 export default (state = initialState, action) => {
@@ -53,14 +61,32 @@ export default (state = initialState, action) => {
         .set('isRejectedTargetClusters', true)
         .set('isFetchingTargetClusters', false);
     case `${QUERY_V2V_HOSTS}_PENDING`:
-      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
-      return state;
+      return state.set('isFetchingHostsQuery', true).set('isRejectedHostsQuery', false);
     case `${QUERY_V2V_HOSTS}_FULFILLED`:
-      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
-      return state;
+      const { meta: { hostIDsByClusterID }, payload: { data } } = action;
+      const hostsByHostID = data.results.reduce(
+        (newObject, host) => ({
+          ...newObject,
+          [host.id]: host
+        }),
+        {}
+      );
+      const hostsByClusterID = Object.keys(hostIDsByClusterID).reduce(
+        (newObject, clusterID) => ({
+          ...newObject,
+          [clusterID]: hostsByHostID[hostIDsByClusterID[clusterID]]
+        }),
+        {}
+      );
+      return state
+        .set('hostsByClusterID', hostsByClusterID)
+        .set('isFetchingHostsQuery', false)
+        .set('isRejectedHostsQuery', false)
     case `${QUERY_V2V_HOSTS}_REJECTED`:
-      console.log('[mturley] HOSTS QUERY: PENDING: ', action); // TODO mturley
-      return state;
+      return state
+        .set('errorHostsQuery', action.payload)
+        .set('isFetchingHostsQuery', false)
+        .set('isRejectedHostsQuery', true);
     default:
       return state;
   }

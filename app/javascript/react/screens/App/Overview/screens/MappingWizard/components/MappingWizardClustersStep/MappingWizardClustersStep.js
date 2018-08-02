@@ -24,9 +24,12 @@ class MappingWizardClustersStep extends React.Component {
 
     fetchSourceClustersAction(fetchSourceClustersUrl);
     fetchTargetClustersAction(fetchTargetComputeUrls[targetProvider]).then(result => {
-      console.log('[mturley] DOING A QUERY: ', queryHostsUrl, hostIDs);
-      const hostIDs = result.value.data.resources.map(host => host.id);
-      queryHostsAction(queryHostsUrl, hostIDs);
+      const hostIDsByClusterID = result.value.data.resources
+        .reduce((newObject, cluster) => ({
+          ...newObject,
+          [cluster.id]: cluster.hosts.map(host => host.id)
+        }), {});
+      queryHostsAction(queryHostsUrl, hostIDsByClusterID);
     });
   };
 
@@ -38,7 +41,10 @@ class MappingWizardClustersStep extends React.Component {
       targetClusters,
       isRejectedSourceClusters,
       isRejectedTargetClusters,
-      targetProvider
+      targetProvider,
+      isFetchingHostsQuery,
+      isRejectedHostsQuery,
+      hostsByClusterID
     } = this.props;
 
     if (isRejectedSourceClusters || isRejectedTargetClusters) {
@@ -67,6 +73,9 @@ class MappingWizardClustersStep extends React.Component {
         isFetchingSourceClusters={isFetchingSourceClusters}
         isFetchingTargetClusters={isFetchingTargetClusters}
         targetProvider={targetProvider}
+        isFetchingHostsQuery={isFetchingHostsQuery}
+        isRejectedHostsQuery={isRejectedHostsQuery}
+        hostsByClusterID={hostsByClusterID}
       />
     );
   }

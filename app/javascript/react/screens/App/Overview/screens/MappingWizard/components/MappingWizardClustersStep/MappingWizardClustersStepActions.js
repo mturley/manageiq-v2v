@@ -1,6 +1,10 @@
 import URI from 'urijs';
 import API from '../../../../../../../../common/API';
-import { FETCH_V2V_SOURCE_CLUSTERS, FETCH_V2V_TARGET_CLUSTERS, QUERY_V2V_HOSTS } from './MappingWizardClustersStepConstants';
+import {
+  FETCH_V2V_SOURCE_CLUSTERS,
+  FETCH_V2V_TARGET_CLUSTERS,
+  QUERY_V2V_HOSTS
+} from './MappingWizardClustersStepConstants';
 
 const _getSourceClustersActionCreator = url => dispatch =>
   dispatch({
@@ -24,14 +28,20 @@ export const fetchTargetClustersAction = url => {
   return _getTargetClustersActionCreator(uri.toString());
 };
 
-const _getQueryHostsActionCreator = (url, hostIDs) => dispatch =>
-  dispatch({
+const _getQueryHostsActionCreator = (url, hostIDsByClusterID) => dispatch => {
+  const hostIDs = Object.values(hostIDsByClusterID).reduce(
+    (allHostIDs, someHostIDs) => [...allHostIDs, ...someHostIDs],
+    []
+  )
+  return dispatch({
     type: QUERY_V2V_HOSTS,
     payload: API.post(url, {
       action: 'query',
-      resources: hostIDs.map(id => ({ id }))
-    })
+      resources: hostIDs.map(id => ({ id })),
+    }),
+    meta: { hostIDsByClusterID }
   });
+};
 
 export const queryHostsAction = (url, hostIDs) => {
   const uri = new URI(url);

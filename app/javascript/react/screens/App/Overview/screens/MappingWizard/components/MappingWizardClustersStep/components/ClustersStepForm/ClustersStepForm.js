@@ -104,7 +104,9 @@ class ClustersStepForm extends React.Component {
       isFetchingSourceClusters,
       isFetchingTargetClusters,
       input,
-      targetProvider
+      targetProvider,
+      isFetchingHostsQuery,
+      hostsByClusterID
     } = this.props;
 
     const { selectedTargetCluster, selectedSourceClusters, selectedMapping } = this.state;
@@ -152,7 +154,6 @@ class ClustersStepForm extends React.Component {
                   selected={
                     selectedSourceClusters && selectedSourceClusters.some(sourceCluster => sourceCluster.id === item.id)
                   }
-
                   handleClick={this.selectSourceCluster}
                   handleKeyPress={this.selectSourceCluster}
                 />
@@ -166,8 +167,9 @@ class ClustersStepForm extends React.Component {
               loading={isFetchingTargetClusters}
             >
               {targetClusters.map(item => {
-                console.log('[mturley] target cluster:', item);
-                const showWarning = true; // [mturley] TODO base this on actual host data
+                const hosts = hostsByClusterID[item];
+                console.log('[mturley] HOSTS', hosts);
+                const showWarning = !isFetchingHostsQuery && hosts && true; // host has no conversion host enabled
                 return (
                   <DualPaneMapperListItem
                     item={item}
