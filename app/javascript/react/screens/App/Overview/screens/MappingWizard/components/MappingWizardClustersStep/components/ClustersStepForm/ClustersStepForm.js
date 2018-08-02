@@ -167,8 +167,7 @@ class ClustersStepForm extends React.Component {
               loading={isFetchingTargetClusters}
             >
               {targetClusters.map(item => {
-                const hosts = hostsByClusterID[item.id];
-                console.log('[mturley] HOSTS???', hosts);
+                const hosts = hostsByClusterID && hostsByClusterID[item.id];
                 const someConversionHostEnabled =
                   hosts &&
                   hosts.some(host => host.tags.some(tag => tag.name === '/managed/v2v_transformation_host/true'));
