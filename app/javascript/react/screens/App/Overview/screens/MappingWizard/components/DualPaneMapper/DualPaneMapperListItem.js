@@ -18,7 +18,7 @@ const DualPaneMapperListItem = ({ item, text, warningMessage, selected, handleCl
       trigger={['click']}
       delay={500}
       rootClose
-      onClick={event => event.stopPropagation() /* Don't alter the selection */}
+      onClick={event => event.stopPropagation()}
     >
       <Icon type="pf" name="warning-triangle-o" className="clickable-icon" />
     </OverlayTrigger>
@@ -49,7 +49,7 @@ const DualPaneMapperListItem = ({ item, text, warningMessage, selected, handleCl
 DualPaneMapperListItem.propTypes = {
   item: PropTypes.object,
   text: PropTypes.string,
-  warningMessage: PropTypes.node,
+  warningMessage: PropTypes.string,
   selected: PropTypes.bool,
   handleClick: PropTypes.func,
   handleKeyPress: PropTypes.func
