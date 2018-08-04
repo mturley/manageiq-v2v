@@ -8,9 +8,19 @@ import reducer from './PlanWizardReducer';
 
 export const reducers = { planWizard: reducer };
 
+// TODO [mturley] REMOVE ME -- this is a temporary hack used to force an API error for testing error handling.
+const __justKiddingNoErrorsHere__ = form => ({
+  ...form,
+  planWizardGeneralStep: {
+    ...form.planWizardGeneralStep,
+    syncErrors: false,
+    asyncErrors: false
+  }
+});
+
 const mapStateToProps = ({ overview, planWizard, form }, ownProps) => {
   const selectedOverview = planWizardOverviewFilter(overview);
-  const selectedForms = planWizardFormFilter(form);
+  const selectedForms = planWizardFormFilter(__justKiddingNoErrorsHere__(form)); // TODO [mturley] remove __justKiddingNoErrorsHere__
   return {
     ...planWizard,
     ...selectedOverview,
