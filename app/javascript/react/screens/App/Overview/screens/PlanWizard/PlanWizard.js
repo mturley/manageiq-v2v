@@ -82,13 +82,9 @@ class PlanWizard extends React.Component {
           item.destination_type === OSP_NETWORK
       );
 
-    // [mturley] the new instancePropertiesStep is incomplete, and disabled for now.
-    // [mturley] TODO: un-comment this block in the next PR.
-    /*
-    if (openstackTargetSelected) {
+    if (openstackTargetSelected || selectedMapping && selectedMapping.name === 'fake-osp-mapping') {
       return [generalStep, vmStep, instancePropertiesStep, advancedOptionsStep, scheduleStep, resultsStep];
     }
-    */
 
     return [generalStep, vmStep, advancedOptionsStep, scheduleStep, resultsStep];
   };
