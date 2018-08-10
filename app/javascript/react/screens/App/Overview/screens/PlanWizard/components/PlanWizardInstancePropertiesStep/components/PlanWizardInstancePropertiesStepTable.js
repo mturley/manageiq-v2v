@@ -167,19 +167,6 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
     }
   };
 
-  onRow = (row, { rowIndex }) => {
-    const { selectedRows } = this.state;
-    const selected = selectedRows.indexOf(row.id) > -1;
-    return {
-      className: classNames({
-        selected,
-        warning: row.conflict,
-        danger: row.invalid
-      }),
-      role: 'row'
-    };
-  };
-
   onSubmit = () => {
     this.setPage(this.state.pageChangeValue);
   };
@@ -247,7 +234,7 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           }}
         >
           <Table.Header headerRows={resolve.headerRows({ columns })} />
-          <Table.Body rows={sortedPaginatedRows.rows || []} rowKey="id" onRow={this.onRow} />
+          <Table.Body rows={sortedPaginatedRows.rows || []} rowKey="id" />
         </Table.PfProvider>
         <PaginationRow
           viewType={PAGINATION_VIEW.TABLE}
