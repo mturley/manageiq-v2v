@@ -8,54 +8,43 @@ class PlanWizardInstancePropertiesStep extends Component {
   componentDidMount() {
     const {
       selectedMapping,
-      fetchOpenstackAttributesUrl,
-      fetchOpenstackSecurityGroupsParams,
-      fetchOpenstackFlavorsParams,
-      fetchOpenstackFlavorsAction,
-      fetchOpenstackSecurityGroupsAction
+      fetchOpenstackGroupsAndFlavorsUrl,
+      fetchOpenstackGroupsAndFlavorsParam,
+      fetchGroupsAndFlavorsAction
     } = this.props;
 
-    const targetTenant = selectedMapping && selectedMapping.transformation_mapping_items &&
+    const targetTenant =
+      selectedMapping &&
+      selectedMapping.transformation_mapping_items &&
       selectedMapping.transformation_mapping_items.find(item => item.destination_type === OSP_TENANT);
 
     if (targetTenant) {
-      fetchOpenstackSecurityGroupsAction(
-        fetchOpenstackAttributesUrl,
+      fetchGroupsAndFlavorsAction(
+        fetchOpenstackGroupsAndFlavorsUrl,
         targetTenant.destination_id,
-        fetchOpenstackSecurityGroupsParams
-      )
-      fetchOpenstackFlavorsAction(
-        fetchOpenstackAttributesUrl,
-        targetTenant.destination_id,
-        fetchOpenstackFlavorsParams
-      )
+        fetchOpenstackGroupsAndFlavorsParam
+      );
     }
   }
 
   render() {
     const { vmStepSelectedVms } = this.props;
     return (
-      <Field
-        name="ospInstanceProperties"
-        component={PlanWizardInstancePropertiesStepTable}
-        rows={vmStepSelectedVms}
-      />
+      <Field name="ospInstanceProperties" component={PlanWizardInstancePropertiesStepTable} rows={vmStepSelectedVms} />
     );
   }
 }
 
 PlanWizardInstancePropertiesStep.propTypes = {
   vmStepSelectedVms: PropTypes.array,
-  fetchOpenstackAttributesUrl: PropTypes.string,
-  fetchOpenstackSecurityGroupsParams: PropTypes.string,
-  fetchOpenstackFlavorsParams: PropTypes.string,
-  selectedMapping: PropTypes.object
+  selectedMapping: PropTypes.object,
+  fetchOpenstackGroupsAndFlavorsUrl: PropTypes.string,
+  fetchOpenstackGroupsAndFlavorsParam: PropTypes.string,
+  fetchGroupsAndFlavorsAction: PropTypes.func
 };
 
 export default reduxForm({
   form: 'planWizardInstancePropertiesStep',
-  initialValues: {
-
-  },
+  initialValues: {},
   destroyOnUnmount: false
 })(PlanWizardInstancePropertiesStep);

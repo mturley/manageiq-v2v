@@ -4,16 +4,9 @@ import orderBy from 'lodash.orderby';
 import * as sort from 'sortabular';
 import * as resolve from 'table-resolver';
 import { compose } from 'recompose';
-import {
-  paginate,
-  Grid,
-  PaginationRow,
-  Table,
-  PAGINATION_VIEW
-} from 'patternfly-react';
+import { paginate, Grid, PaginationRow, Table, PAGINATION_VIEW } from 'patternfly-react';
 
 class PlanWizardInstancePropertiesStepTable extends React.Component {
-
   constructor(props) {
     super(props);
 
@@ -200,12 +193,7 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
   };
 
   render() {
-    const {
-      columns,
-      pagination,
-      sortingColumns,
-      pageChangeValue,
-    } = this.state;
+    const { columns, pagination, sortingColumns, pageChangeValue } = this.state;
 
     const sortedPaginatedRows = this.currentRows();
 

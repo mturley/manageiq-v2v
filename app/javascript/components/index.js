@@ -102,9 +102,8 @@ export const coreComponents = [
     name: 'PlanWizardInstancePropertiesStepContainer',
     type: PlanWizardInstancePropertiesStepContainer,
     data: {
-      fetchOpenstackAttributesUrl: '/api/cloud_tenants',
-      fetchOpenstackSecurityGroupsParams: 'attributes=ext_management_system.security_groups',
-      fetchOpenstackFlavorsParams: 'attributes=ext_management_system.flavors'
+      fetchOpenstackGroupsAndFlavorsUrl: '/api/cloud_tenants/',
+      fetchOpenstackGroupsAndFlavorsParam: '?attributes=flavors,security_groups'
     },
     store: true
   },

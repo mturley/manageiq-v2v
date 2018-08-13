@@ -7,25 +7,30 @@ import { getVMStepSelectedVms } from '../PlanWizardAdvancedOptionsStep/PlanWizar
 
 export const reducers = { planWizardInstancePropertiesStep: reducer };
 
-const mapStateToProps = ({
-  overview: { transformationMappings },
-  planWizardInstancePropertiesStep,
-  planWizardVMStep,
-  form: {
-    planWizardGeneralStep: {
-      values: { vm_choice_radio, infrastructure_mapping }
-    },
-    planWizardVMStep: {
-      values: { selectedVms }
-    },
-    planWizardInstancePropertiesStep: instancePropertiesStepForm
-  }
-}, ownProps) => {
+const mapStateToProps = (
+  {
+    overview: { transformationMappings },
+    planWizardInstancePropertiesStep,
+    planWizardVMStep,
+    form: {
+      planWizardGeneralStep: {
+        values: { vm_choice_radio, infrastructure_mapping }
+      },
+      planWizardVMStep: {
+        values: { selectedVms }
+      },
+      planWizardInstancePropertiesStep: instancePropertiesStepForm
+    }
+  },
+  ownProps
+) => {
   const allVms =
     vm_choice_radio === 'vms_via_csv'
       ? [...planWizardVMStep.valid_vms, ...planWizardVMStep.invalid_vms, ...planWizardVMStep.conflict_vms]
       : planWizardVMStep.valid_vms;
-  const selectedMapping = transformationMappings && infrastructure_mapping &&
+  const selectedMapping =
+    transformationMappings &&
+    infrastructure_mapping &&
     transformationMappings.find(mapping => mapping.id === infrastructure_mapping);
   return {
     ...planWizardInstancePropertiesStep,

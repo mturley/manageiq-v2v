@@ -73,9 +73,7 @@ class PlanWizard extends React.Component {
     const openstackTargetSelected =
       selectedMapping &&
       selectedMapping.transformation_mapping_items &&
-      selectedMapping.transformation_mapping_items.some(
-        item => item.destination_type === OSP_TENANT
-      );
+      selectedMapping.transformation_mapping_items.some(item => item.destination_type === OSP_TENANT);
 
     if (openstackTargetSelected) {
       return [generalStep, vmStep, instancePropertiesStep, advancedOptionsStep, scheduleStep, resultsStep];
