@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { noop, Button, Icon, Wizard } from 'patternfly-react';
 import { createMigrationPlans } from './helpers';
 import PlanWizardBody from './PlanWizardBody';
-import { MIGRATIONS_FILTERS, OSP_TENANT, OSP_VOLUME, OSP_NETWORK } from '../../OverviewConstants';
+import { MIGRATIONS_FILTERS, OSP_TENANT } from '../../OverviewConstants';
 
 import componentRegistry from '../../../../../../components/componentRegistry';
 import PlanWizardGeneralStep from '../PlanWizard/components/PlanWizardGeneralStep';
@@ -74,10 +74,7 @@ class PlanWizard extends React.Component {
       selectedMapping &&
       selectedMapping.transformation_mapping_items &&
       selectedMapping.transformation_mapping_items.some(
-        item =>
-          item.destination_type === OSP_TENANT ||
-          item.destination_type === OSP_VOLUME ||
-          item.destination_type === OSP_NETWORK
+        item => item.destination_type === OSP_TENANT
       );
 
     if (openstackTargetSelected) {
