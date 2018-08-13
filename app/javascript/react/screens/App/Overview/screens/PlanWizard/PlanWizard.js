@@ -41,7 +41,6 @@ class PlanWizard extends React.Component {
       render: () => this.planWizardVMStepContainer,
       disableGoto: !this.props.planWizardVMStep.values
     };
-    // eslint-disable-next-line no-unused-vars
     const instancePropertiesStep = {
       id: stepIDs.instancePropertiesStep,
       title: __('Instance Properties'),
@@ -71,7 +70,6 @@ class PlanWizard extends React.Component {
       planWizardGeneralStep && planWizardGeneralStep.values && planWizardGeneralStep.values.infrastructure_mapping;
     const selectedMapping = transformationMappings.find(mapping => mapping.id === selectedMappingId);
 
-    // eslint-disable-next-line no-unused-vars
     const openstackTargetSelected =
       selectedMapping &&
       selectedMapping.transformation_mapping_items &&
@@ -82,7 +80,7 @@ class PlanWizard extends React.Component {
           item.destination_type === OSP_NETWORK
       );
 
-    if (openstackTargetSelected || selectedMapping && selectedMapping.name === 'fake-osp-mapping') {
+    if (openstackTargetSelected) {
       return [generalStep, vmStep, instancePropertiesStep, advancedOptionsStep, scheduleStep, resultsStep];
     }
 
