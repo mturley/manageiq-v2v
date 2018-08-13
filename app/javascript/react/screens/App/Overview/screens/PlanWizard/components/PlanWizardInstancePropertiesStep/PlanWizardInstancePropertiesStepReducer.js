@@ -12,9 +12,7 @@ const initialState = Immutable({
 export default (state = initialState, action) => {
   switch (action.type) {
     case `${FETCH_V2V_OSP_GROUPS_AND_FLAVORS}_PENDING`:
-      return state
-        .set('isFetchingGroupsAndFlavors', true)
-        .set('isRejectedGroupsAndFlavors', false);
+      return state.set('isFetchingGroupsAndFlavors', true).set('isRejectedGroupsAndFlavors', false);
     case `${FETCH_V2V_OSP_GROUPS_AND_FLAVORS}_FULFILLED`:
       return state
         .set('securityGroups', action.payload.data.security_groups)

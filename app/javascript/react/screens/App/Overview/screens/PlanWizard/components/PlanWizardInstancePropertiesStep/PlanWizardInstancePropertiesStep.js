@@ -37,7 +37,7 @@ class PlanWizardInstancePropertiesStep extends Component {
           <div className="spinner spinner-lg blank-slate-pf-icon" />
           <h3 className="blank-slate-pf-main-action">{__('Loading...')}</h3>
         </div>
-      )
+      );
     }
     return (
       <Field name="ospInstanceProperties" component={PlanWizardInstancePropertiesStepTable} rows={vmStepSelectedVms} />
