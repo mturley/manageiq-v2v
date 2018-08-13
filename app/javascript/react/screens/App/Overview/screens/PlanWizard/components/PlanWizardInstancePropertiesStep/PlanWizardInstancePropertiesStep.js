@@ -28,7 +28,9 @@ class PlanWizardInstancePropertiesStep extends Component {
   }
 
   render() {
-    const { vmStepSelectedVms } = this.props;
+    const { vmStepSelectedVms, securityGroups, flavors } = this.props;
+    console.log('[mturley] GROUPS:', securityGroups);
+    console.log('[mturley] FLAVORS:', flavors);
     return (
       <Field name="ospInstanceProperties" component={PlanWizardInstancePropertiesStepTable} rows={vmStepSelectedVms} />
     );
@@ -40,7 +42,10 @@ PlanWizardInstancePropertiesStep.propTypes = {
   selectedMapping: PropTypes.object,
   fetchOpenstackGroupsAndFlavorsUrl: PropTypes.string,
   fetchOpenstackGroupsAndFlavorsParam: PropTypes.string,
-  fetchGroupsAndFlavorsAction: PropTypes.func
+  fetchGroupsAndFlavorsAction: PropTypes.func,
+  securityGroups: PropTypes.arrayOf(PropTypes.object),
+  flavors: PropTypes.arrayOf(PropTypes.object),
+  isFetchingGroupsAndFlavors: PropTypes.bool
 };
 
 export default reduxForm({
