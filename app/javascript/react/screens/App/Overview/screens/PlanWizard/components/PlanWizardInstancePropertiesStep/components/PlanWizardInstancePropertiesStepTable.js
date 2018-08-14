@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import orderBy from 'lodash.orderby';
+import cloneDeep from 'lodash.clonedeep';
+import findIndex from 'lodash.findindex';
 import * as sort from 'sortabular';
 import * as resolve from 'table-resolver';
 import { compose } from 'recompose';
-import { paginate, Grid, PaginationRow, Table, PAGINATION_VIEW } from 'patternfly-react';
+import { paginate, Grid, PaginationRow, Table, PAGINATION_VIEW, Icon, Button, FormControl } from 'patternfly-react';
 
 class PlanWizardInstancePropertiesStepTable extends React.Component {
   constructor(props) {
     super(props);
-
-    const { rows } = this.props;
 
     const getSortingColumns = () => this.state.sortingColumns || {};
 
@@ -38,6 +38,80 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
     // enables our custom header formatters extensions to reactabular
     this.customHeaderFormatters = Table.customHeaderFormattersDefinition;
 
+    const inlineEditController = {
+      isEditing: ({ rowData }) => rowData.backup !== undefined,
+      onActivate: ({ rowData }) => {
+        const rows = cloneDeep(this.state.rows);
+        const index = findIndex(rows, { id: rowData.id });
+
+        rows[index].backup = cloneDeep(rows[index]);
+
+        this.setState({ rows, editing: true });
+      },
+      onConfirm: ({ rowData }) => {
+        const rows = cloneDeep(this.state.rows);
+        const index = findIndex(rows, { id: rowData.id });
+
+        delete rows[index].backup;
+
+        this.setState({ rows, editing: false });
+      },
+      onCancel: ({ rowData }) => {
+        const rows = cloneDeep(this.state.rows);
+        const index = findIndex(rows, { id: rowData.id });
+
+        rows[index] = cloneDeep(rows[index].backup);
+        delete rows[index].backup;
+
+        this.setState({ rows, editing: false });
+      },
+      onChange: (value, { rowData, property }) => {
+        const rows = cloneDeep(this.state.rows);
+        const index = findIndex(rows, { id: rowData.id });
+
+        rows[index][property] = value;
+
+        this.setState({ rows });
+      }
+    };
+    this.inlineEditController = inlineEditController;
+
+    const inlineEditFormatter = Table.inlineEditFormatterFactory({
+      isEditing: additionalData => inlineEditController.isEditing(additionalData),
+      renderValue: (value, additionalData) => (
+        <td className="editable">
+          <span className="static">{value}</span>
+        </td>
+      ),
+      renderEdit: (value, additionalData) => (
+        <td className="editable editing">
+          <FormControl
+            type="text"
+            defaultValue={value}
+            onBlur={e => inlineEditController.onChange(e.target.value, additionalData)}
+          />
+        </td>
+      )
+    });
+
+    const inlineEditButtonsFormatter = Table.inlineEditFormatterFactory({
+      isEditing: additionalData => this.state.editing,
+      renderValue: (value, additionalData) => (
+        <td style={{ padding: '2px' }}>
+          <Button bsStyle="default" onClick={() => inlineEditController.onActivate(additionalData)}>
+            <Icon type="pf" name="edit" />
+          </Button>
+        </td>
+      ),
+      renderEdit: (value, additionalData) => (
+        <td style={{ padding: '2px' }}>
+          <Button bsStyle="default" disabled>
+            <Icon type="pf" name="edit" />
+          </Button>
+        </td>
+      )
+    });
+
     this.state = {
       // Sort the first column in an ascending way by default.
       sortingColumns: {
@@ -64,7 +138,7 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           },
           cell: {
             props: {
-              index: 1
+              index: 0
             },
             formatters: [Table.tableCellFormatter]
           }
@@ -84,7 +158,7 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           },
           cell: {
             props: {
-              index: 2
+              index: 1
             },
             formatters: [Table.tableCellFormatter]
           }
@@ -104,18 +178,73 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           },
           cell: {
             props: {
-              index: 4
+              index: 2
             },
             formatters: [Table.tableCellFormatter]
           }
+        },
+        {
+          property: 'osp_security_group',
+          header: {
+            label: __('OpenStack Security Group'),
+            props: {
+              index: 3,
+              rowSpan: 1,
+              colSpan: 1
+            },
+            transforms: [sortableTransform],
+            formatters: [sortingFormatter],
+            customFormatters: [Table.sortableHeaderCellFormatter]
+          },
+          cell: {
+            props: {
+              index: 3
+            },
+            formatters: [inlineEditFormatter]
+          }
+        },
+        {
+          property: 'osp_flavor',
+          header: {
+            label: __('OpenStack Flavor'),
+            props: {
+              index: 4,
+              rowSpan: 1,
+              colSpan: 1
+            },
+            transforms: [sortableTransform],
+            formatters: [sortingFormatter],
+            customFormatters: [Table.sortableHeaderCellFormatter]
+          },
+          cell: {
+            props: {
+              index: 4
+            },
+            formatters: [inlineEditFormatter]
+          }
+        },
+        {
+          property: 'actions',
+          header: {
+            label: '',
+            props: {
+              index: 5
+            },
+            formatters: [Table.actionHeaderCellFormatter]
+          },
+          cell: {
+            props: {
+              index: 5
+            },
+            formatters: [inlineEditButtonsFormatter]
+          }
         }
-        // TODO [mturley] add column OpenStack Security Group
-        // TODO [mturley] add column OpenStack Flavor
-        // TODO [mturley] add column with edit button
       ],
 
       // rows state
-      rows,
+      rows: this.props.rows,
+
+      editing: false,
 
       // pagination default states
       pagination: {

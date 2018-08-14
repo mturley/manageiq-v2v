@@ -29,8 +29,7 @@ class PlanWizardInstancePropertiesStep extends Component {
 
   render() {
     const { vmStepSelectedVms, securityGroups, flavors, isFetchingGroupsAndFlavors } = this.props;
-    console.log('[mturley] GROUPS:', securityGroups);
-    console.log('[mturley] FLAVORS:', flavors);
+
     if (isFetchingGroupsAndFlavors) {
       return (
         <div className="blank-slate-pf">
@@ -40,7 +39,13 @@ class PlanWizardInstancePropertiesStep extends Component {
       );
     }
     return (
-      <Field name="ospInstanceProperties" component={PlanWizardInstancePropertiesStepTable} rows={vmStepSelectedVms} />
+      <Field
+        name="ospInstanceProperties"
+        component={PlanWizardInstancePropertiesStepTable}
+        rows={vmStepSelectedVms}
+        securityGroups={securityGroups}
+        flavors={flavors}
+      />
     );
   }
 }
