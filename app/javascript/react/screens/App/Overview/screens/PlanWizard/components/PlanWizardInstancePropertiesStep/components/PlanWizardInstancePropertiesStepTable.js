@@ -7,6 +7,7 @@ import * as sort from 'sortabular';
 import * as resolve from 'table-resolver';
 import { compose } from 'recompose';
 import { paginate, Grid, PaginationRow, Table, PAGINATION_VIEW, Icon, Button, FormControl } from 'patternfly-react';
+import { OSP_DEFAULT_SECURITY_GROUP, OSP_DEFAULT_FLAVOR } from '../PlanWizardInstancePropertiesStepConstants';
 
 class PlanWizardInstancePropertiesStepTable extends React.Component {
   constructor(props) {
@@ -83,15 +84,24 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           <span className="static">{value}</span>
         </td>
       ),
-      renderEdit: (value, additionalData) => (
-        <td className="editable editing">
-          <FormControl
-            type="text"
-            defaultValue={value}
-            onBlur={e => inlineEditController.onChange(e.target.value, additionalData)}
-          />
-        </td>
-      )
+      renderEdit: (value, additionalData) => {
+        const { options, defaultValue } = additionalData.column.cell.inlineEditSelect;
+        return (
+          <td className="editable editing">
+            <FormControl
+              componentClass="select"
+              defaultValue={value || defaultValue}
+              onBlur={e => inlineEditController.onChange(e.target.value, additionalData)}
+            >
+              {options.map(opt => (
+                <option value={opt.name} key={opt.id}>
+                  {opt.name}
+                </option>
+              ))}
+            </FormControl>
+          </td>
+        );
+      }
     });
 
     const inlineEditButtonsFormatter = Table.inlineEditFormatterFactory({
@@ -200,7 +210,12 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
             props: {
               index: 3
             },
-            formatters: [inlineEditFormatter]
+            formatters: [inlineEditFormatter],
+            inlineEditSelect: {
+              // Custom property for inlineEditFormatter
+              options: props.securityGroups,
+              defaultValue: OSP_DEFAULT_SECURITY_GROUP
+            }
           }
         },
         {
@@ -220,7 +235,12 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
             props: {
               index: 4
             },
-            formatters: [inlineEditFormatter]
+            formatters: [inlineEditFormatter],
+            inlineEditSelect: {
+              // Custom property for inlineEditFormatter
+              options: props.flavors,
+              defaultValue: OSP_DEFAULT_FLAVOR
+            }
           }
         },
         {
@@ -242,7 +262,11 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
       ],
 
       // rows state
-      rows: this.props.rows,
+      rows: this.props.rows.map(row => ({
+        ...row,
+        osp_security_group: OSP_DEFAULT_SECURITY_GROUP,
+        osp_flavor: OSP_DEFAULT_FLAVOR
+      })),
 
       editing: false,
 
@@ -386,9 +410,13 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
   }
 }
 PlanWizardInstancePropertiesStepTable.propTypes = {
-  rows: PropTypes.array
+  rows: PropTypes.array,
+  securityGroups: PropTypes.arrayOf(PropTypes.object),
+  flavors: PropTypes.arrayOf(PropTypes.object)
 };
 PlanWizardInstancePropertiesStepTable.defaultProps = {
-  rows: []
+  rows: [],
+  securityGroups: [],
+  flavors: []
 };
 export default PlanWizardInstancePropertiesStepTable;
