@@ -346,11 +346,24 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
                   rows: sortedPaginatedRows.rows,
                   onSelectAllRows: this.onSelectAllRows
                 })
+            },
+            body: {
+              row: Table.InlineEditRow
             }
           }}
         >
           <Table.Header headerRows={resolve.headerRows({ columns })} />
-          <Table.Body rows={sortedPaginatedRows.rows || []} rowKey="id" />
+          <Table.Body
+            rows={sortedPaginatedRows.rows || []}
+            rowKey="id"
+            onRow={(rowData, { rowIndex }) => ({
+              role: 'row',
+              isEditing: () => this.inlineEditController.isEditing({ rowData }),
+              onCancel: () => this.inlineEditController.onCancel({ rowData, rowIndex }),
+              onConfirm: () => this.inlineEditController.onConfirm({ rowData, rowIndex }),
+              last: rowIndex === sortedPaginatedRows.length - 1
+            })}
+          />
         </Table.PfProvider>
         <PaginationRow
           viewType={PAGINATION_VIEW.TABLE}
