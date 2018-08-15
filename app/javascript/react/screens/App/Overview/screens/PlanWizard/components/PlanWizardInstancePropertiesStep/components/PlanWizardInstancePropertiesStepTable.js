@@ -9,6 +9,9 @@ import { compose } from 'recompose';
 import { paginate, Grid, PaginationRow, Table, PAGINATION_VIEW, Icon, Button, FormControl } from 'patternfly-react';
 import { OSP_DEFAULT_SECURITY_GROUP, OSP_DEFAULT_FLAVOR } from '../PlanWizardInstancePropertiesStepConstants';
 
+// Temporary import while https://github.com/patternfly/patternfly-react/issues/535 is open:
+import TableInlineEditRow from './TableInlineEditRow/TableInlineEditRow';
+
 class PlanWizardInstancePropertiesStepTable extends React.Component {
   constructor(props) {
     super(props);
@@ -373,7 +376,8 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
                 })
             },
             body: {
-              row: Table.InlineEditRow
+              // TODO we should use Table.InlineEditRow when patternfly-react#535 is fixed
+              row: TableInlineEditRow
             }
           }}
         >
