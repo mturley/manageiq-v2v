@@ -359,6 +359,7 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
           bordered
           hover
           dataTable
+          inlineEdit
           columns={columns}
           components={{
             header: {
