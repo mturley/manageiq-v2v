@@ -390,7 +390,8 @@ class PlanWizardInstancePropertiesStepTable extends React.Component {
               isEditing: () => this.inlineEditController.isEditing({ rowData }),
               onCancel: () => this.inlineEditController.onCancel({ rowData, rowIndex }),
               onConfirm: () => this.inlineEditController.onConfirm({ rowData, rowIndex }),
-              last: rowIndex === sortedPaginatedRows.length - 1
+              last: rowIndex === sortedPaginatedRows.length - 1,
+              disableButtonsWindowPositioning: true
             })}
           />
         </Table.PfProvider>

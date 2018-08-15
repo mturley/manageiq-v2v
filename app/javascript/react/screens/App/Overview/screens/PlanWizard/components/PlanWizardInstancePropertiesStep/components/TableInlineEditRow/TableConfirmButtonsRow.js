@@ -3,10 +3,10 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { createPortal } from 'react-dom';
+import { createPortal } from 'react-dom'
+import { noop, debounce } from 'patternfly-react';
 import ConfirmButton from '../InlineEdit/ConfirmButton';
 import CancelButton from '../InlineEdit/CancelButton';
-import { noop, debounce } from 'patternfly-react';
 import './closestPolyfill';
 
 class TableConfirmButtonsRow extends React.Component {
@@ -59,9 +59,10 @@ class TableConfirmButtonsRow extends React.Component {
   }
 
   renderConfirmButtons() {
-    const divStyle = this.state.rowDimensions
-      ? this.props.buttonsPosition(this.state.window, this.element.getBoundingClientRect())
-      : {};
+    const divStyle =
+      !this.props.disableButtonsWindowPositioning && this.state.rowDimensions
+        ? this.props.buttonsPosition(this.state.window, this.element.getBoundingClientRect())
+        : {};
 
     const buttonsClass = `inline-edit-buttons ${this.props.buttonsClassName}`;
     return (
@@ -89,10 +90,13 @@ class TableConfirmButtonsRow extends React.Component {
     const elements = [
       <tr ref={this.saveRowDimensions} className={rowClass} key="tableRow">
         {this.props.children}
+        {editing && this.props.disableButtonsWindowPositioning ? (
+          <td className="inline-edit-confirm-buttons-parent">{this.renderConfirmButtons()}</td>
+        ) : null}
       </tr>
     ];
 
-    if (editing && (this.element || this.props.buttonsMountpoint)) {
+    if (editing && !this.props.disableButtonsWindowPositioning && (this.element || this.props.buttonsMountpoint)) {
       elements.push(
         // mount the confirm buttons below the table
         createPortal(
@@ -119,7 +123,8 @@ TableConfirmButtonsRow.defaultProps = {
     confirmButtonLabel: 'Save',
     cancelButtonLabel: 'Cancel'
   },
-  buttonsMountpoint: undefined
+  buttonsMountpoint: undefined,
+  disableButtonsWindowPositioning: false
 };
 
 TableConfirmButtonsRow.propTypes = {
@@ -140,7 +145,9 @@ TableConfirmButtonsRow.propTypes = {
     confirmButtonLabel: PropTypes.string,
     cancelButtonLabel: PropTypes.string
   }),
-  buttonsMountpoint: PropTypes.any
+  buttonsMountpoint: PropTypes.any,
+  /** Turn off the absolute positioning relative to the window */
+  disableButtonsWindowPositioning: PropTypes.bool
 };
 
 export default TableConfirmButtonsRow;
