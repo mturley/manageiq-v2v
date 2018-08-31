@@ -65,7 +65,8 @@ class PlanWizardVMStep extends React.Component {
       invalid_vms,
       conflict_vms,
       validationServiceCalled,
-      csvImportAction
+      csvImportAction,
+      editingPlan
     } = this.props;
     const discoveryMode = vm_choice_radio === 'vms_via_discovery';
 
@@ -126,6 +127,7 @@ class PlanWizardVMStep extends React.Component {
       const validVms = Immutable.asMutable(valid_vms, { deep: true });
       const inValidsVms = Immutable.asMutable(invalid_vms, { deep: true });
       const conflictVms = Immutable.asMutable(conflict_vms, { deep: true });
+      // TODO [mturley] look up and include VMs from editingPlan.options.config_info.actions
       const validVmsWithSelections = discoveryMode ? validVms : validVms.map(vm => ({ ...vm, selected: true }));
       const combined = [...inValidsVms, ...conflictVms, ...validVmsWithSelections];
 
@@ -183,7 +185,8 @@ PlanWizardVMStep.propTypes = {
   errorValidatingVms: PropTypes.string, // eslint-disable-line react/no-unused-prop-types
   valid_vms: PropTypes.array,
   invalid_vms: PropTypes.array,
-  conflict_vms: PropTypes.array
+  conflict_vms: PropTypes.array,
+  editingPlan: PropTypes.object
 };
 
 PlanWizardVMStep.defaultProps = {
