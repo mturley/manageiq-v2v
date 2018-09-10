@@ -135,8 +135,13 @@ class PlanWizardVMStep extends React.Component {
       const inValidsVms = Immutable.asMutable(invalid_vms, { deep: true });
       const conflictVms = Immutable.asMutable(conflict_vms, { deep: true });
       const validVmsWithSelections = discoveryMode ? validVms : validVms.map(vm => ({ ...vm, selected: true }));
-      const combined = [...preselected_vms, ...inValidsVms, ...conflictVms, ...validVmsWithSelections];
-
+      // In case the discovery service returns some of the VMs we pre-selected:
+      const validVmsDeduped = !editingPlan
+        ? validVmsWithSelections
+        : validVmsWithSelections.filter(
+            validVm => !preselected_vms.some(preselectedVm => validVm.id === preselectedVm.id)
+          );
+      const combined = [...preselected_vms, ...inValidsVms, ...conflictVms, ...validVmsDeduped];
       if (combined.length) {
         return (
           <React.Fragment>
