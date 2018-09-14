@@ -11,13 +11,15 @@ import { overwriteCsvConfirmModalProps } from '../../PlanWizardConstants';
 
 class PlanWizardVMStep extends React.Component {
   componentDidMount() {
-    const { vm_choice_radio, editingPlan, queryPreselectedVmsAction } = this.props;
-    if (vm_choice_radio === 'vms_via_discovery') {
-      this.validateVms();
-    }
-    if (editingPlan) {
-      const vmIds = getVmIds(editingPlan);
-      queryPreselectedVmsAction(vmIds);
+    const { vm_choice_radio, editingPlan, queryPreselectedVmsAction, wizardMovingForward } = this.props;
+    if (wizardMovingForward) {
+      if (vm_choice_radio === 'vms_via_discovery') {
+        this.validateVms();
+      }
+      if (editingPlan) {
+        const vmIds = getVmIds(editingPlan);
+        queryPreselectedVmsAction(vmIds);
+      }
     }
   }
   componentDidUpdate(prevProps) {
@@ -64,7 +66,9 @@ class PlanWizardVMStep extends React.Component {
       validationServiceCalled,
       csvImportAction,
       editingPlan,
-      isQueryingVms
+      isQueryingVms,
+      wizardMovingForward,
+      formSelectedVms
     } = this.props;
     const discoveryMode = vm_choice_radio === 'vms_via_discovery';
 
@@ -136,15 +140,24 @@ class PlanWizardVMStep extends React.Component {
         ? [...preselected_vms, ...inValidsVms, ...conflictVms, ...validVmsDeduped]
         : [...inValidsVms, ...conflictVms, ...validVmsWithSelections];
       if (combined.length) {
+        let initialSelectedRows, rowsWithSelections;
+        if (wizardMovingForward) {
+          initialSelectedRows = discoveryMode ? preselected_vms.map(r => r.id) : validVmsWithSelections.map(r => r.id);
+          rowsWithSelections = combined;
+        } else {
+          initialSelectedRows = formSelectedVms || [];
+          rowsWithSelections = combined.map(vm => ({
+            ...vm,
+            selected: initialSelectedRows.some(id => vm.id === id)
+          }));
+        }
         return (
           <React.Fragment>
             <Field
               name="selectedVms"
               component={PlanWizardVMStepTable}
-              rows={combined}
-              initialSelectedRows={
-                discoveryMode ? preselected_vms.map(r => r.id) : validVmsWithSelections.map(r => r.id)
-              }
+              rows={rowsWithSelections}
+              initialSelectedRows={initialSelectedRows}
               onCsvImportAction={this.showOverwriteCsvConfirmModal}
               discoveryMode={discoveryMode}
               validate={[
@@ -195,7 +208,9 @@ PlanWizardVMStep.propTypes = {
   preselected_vms: PropTypes.array,
   editingPlan: PropTypes.object,
   queryPreselectedVmsAction: PropTypes.func,
-  isQueryingVms: PropTypes.bool
+  isQueryingVms: PropTypes.bool,
+  wizardMovingForward: PropTypes.bool,
+  formSelectedVms: PropTypes.array
 };
 
 PlanWizardVMStep.defaultProps = {

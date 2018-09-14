@@ -6,9 +6,11 @@ import {
   V2V_PLAN_WIZARD_SHOW_ALERT,
   V2V_PLAN_WIZARD_HIDE_ALERT
 } from './PlanWizardConstants';
+import { PLAN_WIZARD_BACK, PLAN_WIZARD_NEXT } from '../../OverviewConstants';
 
 const initialState = Immutable({
-  plansBody: {}
+  plansBody: {},
+  wizardMovingForward: true
 });
 
 export default (state = initialState, action) => {
@@ -21,6 +23,10 @@ export default (state = initialState, action) => {
       return Immutable.merge(state, action.payload);
     case V2V_PLAN_WIZARD_HIDE_ALERT:
       return state.set('alertText', '');
+    case PLAN_WIZARD_BACK:
+      return state.set('wizardMovingForward', false);
+    case PLAN_WIZARD_NEXT:
+      return state.set('wizardMovingForward', true);
     default:
       return state;
   }
