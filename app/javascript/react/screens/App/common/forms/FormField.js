@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, Grid } from 'patternfly-react';
+import { Form, Grid, Switch } from 'patternfly-react';
 import { Field } from 'redux-form';
 
 export const FormField = ({
@@ -65,6 +65,9 @@ export const FormField = ({
             <br />
           </div>
         ));
+        break;
+      case 'switch':
+        field = <Switch bsSize="normal" onChange={(el, state) => input.onChange(state)} value={input.value || false} />;
         break;
       default:
     }
