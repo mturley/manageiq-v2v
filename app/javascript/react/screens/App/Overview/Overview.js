@@ -9,6 +9,7 @@ import OverviewEmptyState from './components/OverviewEmptyState/OverviewEmptySta
 import componentRegistry from '../../../../components/componentRegistry';
 import getMostRecentRequest from '../common/getMostRecentRequest';
 import ConfirmModal from '../common/ConfirmModal';
+import EditPlanTitleModal from './components/EditPlanTitleModal';
 import { MIGRATIONS_FILTERS } from './OverviewConstants';
 
 class Overview extends React.Component {
@@ -203,6 +204,9 @@ class Overview extends React.Component {
       showPlanWizardAction,
       mappingWizardVisible,
       planWizardVisible,
+      editPlanTitleModalVisible,
+      showEditPlanTitleModalAction,
+      hideEditPlanTitleModalAction,
       transformationMappings,
       isFetchingTransformationMappings,
       isRejectedTransformationMappings,
@@ -350,6 +354,7 @@ class Overview extends React.Component {
               scheduleMigration={scheduleMigration}
               plansMutatedWithMappingInfo={plansMutatedWithMappingInfo}
               showPlanWizardEditModeAction={showPlanWizardEditModeAction}
+              showEditPlanTitleModalAction={showEditPlanTitleModalAction}
             />
           )}
           {hasSufficientProviders ? (
@@ -386,6 +391,15 @@ class Overview extends React.Component {
           )}
         </Spinner>
         <ConfirmModal show={confirmModalVisible} onCancel={hideConfirmModalAction} {...confirmModalOptions} />
+        <EditPlanTitleModal
+          editPlanTitleModalVisible={editPlanTitleModalVisible}
+          hideEditPlanTitleModalAction={hideEditPlanTitleModalAction}
+          transformationPlans={transformationPlans}
+          archivedTransformationPlans={archivedTransformationPlans}
+          fetchTransformationPlansAction={fetchTransformationPlansAction}
+          fetchTransformationPlansUrl={fetchTransformationPlansUrl}
+          fetchArchivedTransformationPlansUrl={fetchArchivedTransformationPlansUrl}
+        />
       </div>
     );
 
@@ -413,6 +427,9 @@ Overview.propTypes = {
   addNotificationAction: PropTypes.func,
   mappingWizardVisible: PropTypes.bool,
   planWizardVisible: PropTypes.bool,
+  editPlanTitleModalVisible: PropTypes.bool,
+  showEditPlanTitleModalAction: PropTypes.func,
+  hideEditPlanTitleModalAction: PropTypes.func,
   transformationPlans: PropTypes.array,
   allRequestsWithTasks: PropTypes.array,
   reloadCard: PropTypes.bool,

@@ -40,7 +40,8 @@ const Migrations = ({
   scheduleMigrationPlan,
   scheduleMigration,
   plansMutatedWithMappingInfo,
-  showPlanWizardEditModeAction
+  showPlanWizardEditModeAction,
+  showEditPlanTitleModalAction
 }) => {
   const filterOptions = [
     MIGRATIONS_FILTERS.notStarted,
@@ -161,6 +162,7 @@ const Migrations = ({
               scheduleMigrationPlan={scheduleMigrationPlan}
               scheduleMigration={scheduleMigration}
               plansMutatedWithMappingInfo={plansMutatedWithMappingInfo}
+              showEditPlanTitleModalAction={showEditPlanTitleModalAction}
             />
           )}
           {activeFilter === MIGRATIONS_FILTERS.archived && (
@@ -179,6 +181,7 @@ const Migrations = ({
               fetchTransformationPlansAction={fetchTransformationPlansAction}
               fetchTransformationPlansUrl={fetchTransformationPlansUrl}
               fetchArchivedTransformationPlansUrl={fetchArchivedTransformationPlansUrl}
+              showEditPlanTitleModalAction={showEditPlanTitleModalAction}
             />
           )}
         </div>
@@ -219,7 +222,8 @@ Migrations.propTypes = {
   scheduleMigrationPlan: PropTypes.object,
   scheduleMigration: PropTypes.func,
   plansMutatedWithMappingInfo: PropTypes.bool,
-  showPlanWizardEditModeAction: PropTypes.func
+  showPlanWizardEditModeAction: PropTypes.func,
+  showEditPlanTitleModalAction: PropTypes.func
 };
 Migrations.defaultProps = {
   transformationPlans: [],
