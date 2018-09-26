@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { noop, Button, Spinner } from 'patternfly-react';
 
+import { transformationHasBeenEdited } from './helpers';
+
 class MappingWizardResultsStep extends React.Component {
   componentDidMount() {
     const {
@@ -9,11 +11,14 @@ class MappingWizardResultsStep extends React.Component {
       postTransformMappingsAction,
       transformationsBody,
       editingMapping,
-      updateTransformationMappingAction
+      updateTransformationMappingAction,
+      targetProvider
     } = this.props;
 
     if (editingMapping) {
-      updateTransformationMappingAction(postMappingsUrl, editingMapping.id, transformationsBody);
+      if (transformationHasBeenEdited(editingMapping, transformationsBody, targetProvider)) {
+        updateTransformationMappingAction(postMappingsUrl, editingMapping.id, transformationsBody);
+      }
     } else {
       postTransformMappingsAction(postMappingsUrl, transformationsBody);
     }
