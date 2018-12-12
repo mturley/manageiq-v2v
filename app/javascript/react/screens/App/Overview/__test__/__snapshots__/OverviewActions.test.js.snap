@@ -33,6 +33,35 @@ Array [
 ]
 `;
 
+exports[`fetchProvidersAction dispatches PENDING and FULFILLED actions 1`] = `
+Array [
+  Object {
+    "type": "FETCH_PROVIDERS_PENDING",
+  },
+  Object {
+    "payload": Object {
+      "data": Object {
+        "mock": "data",
+      },
+    },
+    "type": "FETCH_PROVIDERS_FULFILLED",
+  },
+]
+`;
+
+exports[`fetchProvidersAction dispatches PENDING and REJECTED actions 1`] = `
+Array [
+  Object {
+    "type": "FETCH_PROVIDERS_PENDING",
+  },
+  Object {
+    "error": true,
+    "payload": [Error: <mocked error>],
+    "type": "FETCH_PROVIDERS_REJECTED",
+  },
+]
+`;
+
 exports[`fetchTransformationPlansAction dispatches PENDING and REJECTED actions 1`] = `
 Array [
   Object {
