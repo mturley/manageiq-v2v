@@ -20,13 +20,13 @@ const Settings = props => {
       </Toolbar>
       {hideConversionHostSettings ? (
         <React.Fragment>
-          <h2>{__('Concurrent Migrations')}</h2>
+          <h2>{__('Migration Throttling')}</h2>
           <GeneralSettings />
         </React.Fragment>
       ) : (
         <div style={{ marginTop: 10 }}>
           <Tabs id="settings-tabs" activeKey={match.path} onSelect={key => redirectTo(key)}>
-            <Tab eventKey="/settings" title={__('Concurrent Migrations')}>
+            <Tab eventKey="/settings" title={__('Migration Throttling')}>
               <GeneralSettings />
             </Tab>
             <Tab eventKey="/settings/conversion_hosts" title={__('Conversion Hosts')}>
