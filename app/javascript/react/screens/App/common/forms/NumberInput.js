@@ -7,13 +7,18 @@ class NumberInput extends React.Component {
     const {
       id,
       input: { onChange },
-      min
+      min,
+      max,
+      postfix
     } = this.props;
     const input = $(`#${id}`);
     input.TouchSpin({
       buttondown_class: 'btn btn-default',
       buttonup_class: 'btn btn-default',
-      min
+      postfix_extraclass: 'postfix-label',
+      min,
+      max,
+      postfix
     });
     // bootstrap-touchspin's change event doesn't trigger the rendered input's onChange.
     input.on('change', event => {
@@ -42,7 +47,9 @@ NumberInput.propTypes = {
     value: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     onChange: PropTypes.func
   }),
-  min: PropTypes.number
+  min: PropTypes.number,
+  max: PropTypes.number,
+  postfix: PropTypes.string
 };
 
 NumberInput.defaultProps = {
