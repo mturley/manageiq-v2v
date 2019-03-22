@@ -41,7 +41,17 @@ export const parseConversionHostTasksMetadata = tasks => {
         resourceId,
         unparsedTaskName: task.name
       },
-      name: resourceName // For sorting and filtering
+      name: resourceName, // For sorting and filtering,
+      // TODO remove this when there are tasks with real context_data:
+      context_data: {
+        request_params: {
+          vmware_vddk_package_url: 'mock/path',
+          resource_type: 'ManageIQ::Providers::Redhat::InfraManager::Host',
+          //resource_type: 'ManageIQ::Providers::Openstack::CloudManager::Vm',
+          resource_id: '123456',
+          name: 'mock-name'
+        }
+      }
     };
   });
 };
